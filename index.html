@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"> 
   <title>Sowers Money Movers</title>
+  
+  <script src="config.js"></script>
+  
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
@@ -36,8 +41,6 @@
 <script type="text/babel">
 const { useState, useEffect, useMemo } = React;
 
-const SCRIPT_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSiQr7KUQ0hfV0QKHqYeZNpgGgZW1fPxvz_VbWV4BLqMUcVqeNI29O_OnsEzUWS9DKsMRpSIwd20Uj06PD33bGryggeDNPOkyVaUgRN7v5f2Ibsj8oaEM0vhGImF7E-6DOy21rAudjmt5igpcjaP0NU-Gis4DcDcHzKwoXsJJjGgdM43wBx6uUMrk2SOndmOKfYXg2zHgDgnDLdCFC1EuO2MV_yiXswjsNGjLaKoX9T3q-tpMI57Pw2FMHXq-U26nHQluBO0pekVdiq71G4qtcsMfiyWA&lib=Mc8J5LkGbnziwF7xKoyE4nfdCw1vWoYPm";
-
 function App() {
   const [data, setData] = useState([]);
   const [dates, setDates] = useState([]);
@@ -48,6 +51,7 @@ function App() {
   const [view, setView] = useState('tracker');
 
   useEffect(() => {
+    // SCRIPT_URL is now pulled from config.js
     fetch(SCRIPT_URL).then(res => res.text()).then(text => {
       const rows = text.trim().split(/\r?\n/).map(line => 
         line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim())
@@ -61,7 +65,7 @@ function App() {
       setDates(uniqueDates);
       if (uniqueDates.length > 0) setSelectedDate(uniqueDates[0]);
       setLoading(false);
-    });
+    }).catch(err => console.error("Config missing or Bridge failed:", err));
   }, []);
 
   const historyStats = useMemo(() => {
@@ -72,7 +76,6 @@ function App() {
       const ranked = dayData.filter(r => r.rank > 0);
       const unranked = dayData.filter(r => r.rank === 0);
 
-      // Qualified Success (Ignore 0.00% as no data)
       ranked.forEach(r => {
         if (r.growths[dayIdx] !== 0) {
           qTotal++;
@@ -80,7 +83,6 @@ function App() {
         }
       });
 
-      // Non-Qualified Success
       unranked.forEach(r => {
         if (r.growths[dayIdx] !== 0) {
           nqTotal++;
@@ -88,7 +90,6 @@ function App() {
         }
       });
 
-      // Record logic (Win if ranked avg > 0, Loss if < 0. Skip if exactly 0)
       const validRanked = ranked.filter(r => r.growths[dayIdx] !== 0);
       if (validRanked.length > 0) {
         const avg = validRanked.reduce((s, r) => s + r.growths[dayIdx], 0) / validRanked.length;
