@@ -1,321 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sowers Money Movers</title>
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body { background: #0f0f12; color: #e8e8e8; font-family: 'Inter', sans-serif; }
-    
-    .hero { padding: 48px 48px 32px; background: #12121a; border-bottom: 1px solid #2a2a3a; }
-    .hero h1 { font-size: 52px; font-weight: 900; color: #fff; letter-spacing: -2px; line-height: 1; margin-bottom: 6px; }
-    .hero h2 { font-size: 26px; font-weight: 800; color: #f5a623; margin-bottom: 14px; }
-    
-    .tabs-bar { display: flex; gap: 4px; padding: 20px 48px 0; border-bottom: 1px solid #2a2a3a; background: #12121a; }
-    .tab { padding: 12px 24px; font-size: 14px; font-weight: 600; border-radius: 6px 6px 0 0; cursor: pointer; border: none; background: transparent; color: #666; transition: 0.2s; }
-    .tab.active { background: #1e1e2e; color: #fff; border: 1px solid #2a2a3a; border-bottom: 1px solid #1e1e2e; }
-    
-    .content { padding: 32px 48px; min-height: 500px; }
-    .charts-section { display: flex; gap: 40px; margin-bottom: 32px; flex-wrap: wrap; }
-    .donut-card { background: #161620; padding: 24px; border-radius: 12px; border: 1px solid #2a2a3a; flex: 1; min-width: 200px; text-align: center; }
-    .donut-title { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .donut-val { font-size: 36px; font-weight: 800; }
-    .donut-sub { font-size: 12px; color: #444; margin-top: 4px; }
-    
-    .record-pill { background: #1a1a2e; border: 1px solid #333; padding: 10px 20px; border-radius: 30px; font-weight: 800; font-size: 18px; display: inline-block; margin-bottom: 20px; color: #f5a623; }
-
-    .day-picker { display: flex; gap: 8px; margin-bottom: 24px; }
-    .day-btn { padding: 10px 20px; border-radius: 6px; border: 1px solid #2a2a3a; background: #0f0f12; color: #888; cursor: pointer; font-weight: 600; }
-    .day-btn.active { border-color: #3ecf72; color: #3ecf72; background: #1a3d2a; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    thead th { font-size: 11px; color: #555; text-transform: uppercase; padding: 12px; text-align: left; border-bottom: 1px solid #2a2a3a; }
-    tbody tr { border-bottom: 1px solid #1e1e28; }
-    tbody tr:hover { background: #16161f; }
-    td { padding: 16px 12px; font-size: 14px; color: #ccc; }
-    
-    .right { text-align: right; }
-    .pos { color: #3ecf72; font-weight: 700; }
-    .neg { color: #e85555; font-weight: 700; }
-    
-    .panel { background: #12121a; border: 1px solid #2a2a3a; border-radius: 12px; padding: 48px; text-align: center; }
-    .upload-zone { border: 2px dashed #333; padding: 60px; border-radius: 12px; cursor: pointer; transition: 0.3s; }
-    .upload-zone:hover { border-color: #f5a623; background: #1a1505; }
-    .btn-gold { background: #f5a623; color: #12120a; padding: 14px 28px; border-radius: 6px; font-weight: 700; border: none; cursor: pointer; margin-top: 24px; font-size: 16px; }
+    body { background: #0f0f12; color: #e8e8e8; font-family: -apple-system, sans-serif; margin: 0; padding-bottom: 50px; }
+    .hero { padding: 30px; background: #12121a; border-bottom: 1px solid #2a2a3a; text-align: center; }
+    .status { font-size: 11px; font-weight: bold; margin-top: 10px; text-transform: uppercase; color: #f5a623; letter-spacing: 1px; }
+    .tabs { display: flex; justify-content: center; background: #12121a; border-bottom: 1px solid #2a2a3a; position: sticky; top: 0; z-index: 10; }
+    .tab { padding: 15px 25px; cursor: pointer; color: #666; font-weight: bold; transition: 0.3s; }
+    .tab.active { color: #f5a623; border-bottom: 3px solid #f5a623; }
+    .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+    .stat-card { background: #161620; padding: 20px; border-radius: 15px; border: 1px solid #2a2a3a; text-align: center; }
+    .stat-label { font-size: 10px; color: #555; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
+    .stat-value { font-size: 24px; font-weight: 900; margin-top: 5px; }
+    .donut-ring { width: 70px; height: 70px; margin: 10px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
+    .search-box { width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; border-radius: 8px; color: #fff; margin-bottom: 15px; box-sizing: border-box; font-size: 14px; }
+    .day-btns { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+    .btn { padding: 8px 18px; border-radius: 20px; background: #1a1a2e; color: #888; border: 1px solid #333; cursor: pointer; font-weight: bold; font-size: 12px; }
+    .btn.active { background: #f5a623; color: #000; border-color: #f5a623; }
+    table { width: 100%; border-collapse: collapse; background: #161620; border-radius: 12px; overflow: hidden; border: 1px solid #2a2a3a; }
+    th { text-align: left; padding: 12px; background: #1e1e2e; color: #555; font-size: 10px; text-transform: uppercase; }
+    td { padding: 15px 12px; border-bottom: 1px solid #2a2a3a; font-size: 14px; }
+    .ticker { font-weight: 900; color: #fff; }
+    .pos { color: #3ecf72; } .neg { color: #e85555; }
+    select { width: 100%; padding: 15px; background: #1a1a2e; color: #fff; border: 1px solid #f5a623; border-radius: 8px; font-size: 16px; margin-bottom: 15px; font-weight: bold; }
   </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script type="text/babel">
-const { useState, useEffect, useRef, useMemo } = React;
+const { useState, useEffect, useMemo } = React;
 
-const DAY_COLS = [
-  { id: 'Mon', pCol: 'After_Monday', gCol: 'Monday_Growth_%' },
-  { id: 'Tue', pCol: 'After_Tuesday', gCol: 'Through_Tuesday_Growth_%' },
-  { id: 'Wed', pCol: 'After_Wed', gCol: 'Through_Wed_Growth_%' },
-  { id: 'Thu', pCol: 'After_Thurs', gCol: 'Through_Thurs_Growth_%' },
-  { id: 'Fri', pCol: 'After_Fri', gCol: 'Through_Fri_Growth_%' }
-];
+const SCRIPT_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSiQr7KUQ0hfV0QKHqYeZNpgGgZW1fPxvz_VbWV4BLqMUcVqeNI29O_OnsEzUWS9DKsMRpSIwd20Uj06PD33bGryggeDNPOkyVaUgRN7v5f2Ibsj8oaEM0vhGImF7E-6DOy21rAudjmt5igpcjaP0NU-Gis4DcDcHzKwoXsJJjGgdM43wBx6uUMrk2SOndmOKfYXg2zHgDgnDLdCFC1EuO2MV_yiXswjsNGjLaKoX9T3q-tpMI57Pw2FMHXq-U26nHQluBO0pekVdiq71G4qtcsMfiyWA&lib=Mc8J5LkGbnziwF7xKoyE4nfdCw1vWoYPm";
 
 function App() {
-  const [tab, setTab] = useState('tracker');
-  const [activeDay, setActiveDay] = useState('Mon');
-  const [csvRows, setCsvRows] = useState([]);
+  const [data, setData] = useState([]);
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
-  const [displayStocks, setDisplayStocks] = useState([]);
-  const fileRef = useRef();
+  const [dayIdx, setDayIdx] = useState(0);
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [view, setView] = useState('tracker');
 
   useEffect(() => {
-    const saved = localStorage.getItem('sowers_movers_v6');
-    if (saved) {
-      const p = JSON.parse(saved);
-      setCsvRows(p.csvRows);
-      setDates(p.dates);
-      setSelectedDate(p.selectedDate);
-      setDisplayStocks(p.displayStocks);
-    }
+    fetch(SCRIPT_URL).then(res => res.text()).then(text => {
+      const rows = text.trim().split(/\r?\n/).map(line => 
+        line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim())
+      );
+      const parsed = rows.slice(1).map(r => ({
+        date: r[0], ticker: r[1], rank: parseInt(r[13]) || 0,
+        growths: [parseFloat(r[17])||0, parseFloat(r[21])||0, parseFloat(r[25])||0, parseFloat(r[29])||0, parseFloat(r[33])||0]
+      }));
+      const uniqueDates = [...new Set(parsed.map(r => r.date))].filter(Boolean).reverse();
+      setData(parsed);
+      setDates(uniqueDates);
+      if (uniqueDates.length > 0) setSelectedDate(uniqueDates[0]);
+      setLoading(false);
+    });
   }, []);
 
-  const calculateAccFromGrowth = (rows, growthCol) => {
-    let pos = 0, neg = 0;
-    rows.forEach(r => {
-      const val = parseFloat(r[growthCol]);
-      if (!isNaN(val)) { if (val > 0) pos++; else neg++; }
-    });
-    return { pos, neg };
-  };
+  const historyStats = useMemo(() => {
+    let qWin = 0, qTotal = 0, nqWin = 0, nqTotal = 0, wins = 0, losses = 0;
 
-  const calculateAccFromWinCol = (rows) => {
-    let pos = 0, neg = 0;
-    rows.forEach(r => {
-      const winVal = parseFloat(r['Win?']);
-      if (!isNaN(winVal)) {
-        if (winVal === 1) pos++; else neg++;
-      }
-    });
-    return { pos, neg };
-  };
-
-  const stats = useMemo(() => {
-    if (csvRows.length === 0) return null;
-    const currentDayRef = DAY_COLS.find(d => d.id === activeDay);
-    const dayRows = csvRows.filter(r => r.Run_Date === selectedDate);
-    
-    const qRows = dayRows.filter(r => r.Rank && !isNaN(parseInt(r.Rank)));
-    const cRows = dayRows.filter(r => !r.Rank || isNaN(parseInt(r.Rank)));
-
-    // Historical Logic
-    const globalQ = csvRows.filter(r => r.Rank && !isNaN(parseInt(r.Rank)));
-    const globalC = csvRows.filter(r => !r.Rank || isNaN(parseInt(r.Rank)));
-
-    // Weekly Record Logic
-    let modelWins = 0, modelLosses = 0, modelTies = 0;
     dates.forEach(d => {
-        const dRows = csvRows.filter(r => r.Run_Date === d);
-        const dQ = dRows.filter(r => r.Rank && !isNaN(parseInt(r.Rank)));
-        const dC = dRows.filter(r => !r.Rank || isNaN(parseInt(r.Rank)));
-        const accQ = calculateAccFromWinCol(dQ);
-        const accC = calculateAccFromWinCol(dC);
-        
-        const rateQ = (accQ.pos + accQ.neg) > 0 ? accQ.pos / (accQ.pos + accQ.neg) : 0;
-        const rateC = (accC.pos + accC.neg) > 0 ? accC.pos / (accC.pos + accC.neg) : 0;
-        
-        if (rateQ > rateC) modelWins++;
-        else if (rateQ < rateC) modelLosses++;
-        else modelTies++;
+      const dayData = data.filter(r => r.date === d);
+      const ranked = dayData.filter(r => r.rank > 0);
+      const unranked = dayData.filter(r => r.rank === 0);
+
+      // Qualified Success (Ignore 0.00% as no data)
+      ranked.forEach(r => {
+        if (r.growths[dayIdx] !== 0) {
+          qTotal++;
+          if (r.growths[dayIdx] > 0) qWin++;
+        }
+      });
+
+      // Non-Qualified Success
+      unranked.forEach(r => {
+        if (r.growths[dayIdx] !== 0) {
+          nqTotal++;
+          if (r.growths[dayIdx] > 0) nqWin++;
+        }
+      });
+
+      // Record logic (Win if ranked avg > 0, Loss if < 0. Skip if exactly 0)
+      const validRanked = ranked.filter(r => r.growths[dayIdx] !== 0);
+      if (validRanked.length > 0) {
+        const avg = validRanked.reduce((s, r) => s + r.growths[dayIdx], 0) / validRanked.length;
+        if (avg > 0) wins++;
+        else if (avg < 0) losses++;
+      }
     });
 
     return {
-      current: {
-        qualified: calculateAccFromGrowth(qRows, currentDayRef.gCol),
-        control: calculateAccFromGrowth(cRows, currentDayRef.gCol)
-      },
-      historical: {
-        qualified: calculateAccFromWinCol(globalQ),
-        control: calculateAccFromWinCol(globalC),
-        record: `${modelWins}-${modelLosses}${modelTies > 0 ? `-${modelTies}` : ''}`
-      }
+      qRate: qTotal ? Math.round((qWin/qTotal)*100) : 0,
+      nqRate: nqTotal ? Math.round((nqWin/nqTotal)*100) : 0,
+      record: `${wins}-${losses}`
     };
-  }, [csvRows, selectedDate, activeDay, dates]);
+  }, [data, dates, dayIdx]);
 
-  const handleFileUpload = (e) => {
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const lines = ev.target.result.split(/\r?\n/).filter(l => l.trim() !== '');
-      const headers = lines[0].split(',').map(h => h.trim());
-      const rows = lines.slice(1).map(line => {
-        const values = line.split(',');
-        const obj = {};
-        headers.forEach((h, i) => obj[h] = values[i]);
-        return obj;
-      });
-      const uniqueDates = [...new Set(rows.map(r => r.Run_Date))].filter(Boolean).sort().reverse();
-      setCsvRows(rows);
-      setDates(uniqueDates);
-      setSelectedDate(uniqueDates[0] || '');
-    };
-    reader.readAsText(e.target.files[0]);
-  };
+  const allForDate = useMemo(() => data.filter(r => r.date === selectedDate), [data, selectedDate]);
+  const rankedPicks = useMemo(() => allForDate.filter(r => r.rank > 0).sort((a,b) => a.rank - b.rank), [allForDate]);
+  const searchResults = useMemo(() => 
+    allForDate.filter(r => r.ticker.toLowerCase().includes(search.toLowerCase())), 
+  [allForDate, search]);
 
-  const processDashboard = () => {
-    const dailyRows = csvRows.filter(r => r.Run_Date === selectedDate && r.Rank && !isNaN(parseInt(r.Rank)));
-    const sorted = dailyRows.sort((a,b) => parseInt(a.Rank) - parseInt(b.Rank)).slice(0, 25);
-    
-    const stocks = sorted.map(r => ({
-      ticker: r.Ticker,
-      entry: parseFloat(r['Price Entry']),
-      rank: r.Rank,
-      data: DAY_COLS.reduce((acc, d) => {
-        acc[d.id] = { price: parseFloat(r[d.pCol]), growth: parseFloat(r[d.gCol]) };
-        return acc;
-      }, {})
-    }));
-
-    setDisplayStocks(stocks);
-    localStorage.setItem('sowers_movers_v6', JSON.stringify({
-      csvRows, dates, selectedDate, displayStocks: stocks
-    }));
-    setTab('tracker');
-  };
-
-  const renderDonut = (title, data, comparisonVal = null) => {
-    const total = data.pos + data.neg;
-    const pct = total === 0 ? 0 : Math.round((data.pos / total) * 100);
-    
-    let color = '#fff';
-    if (comparisonVal !== null) {
-        if (pct > comparisonVal) color = '#3ecf72';
-        else if (pct < comparisonVal) color = '#e85555';
-    }
-
-    return (
-      <div className="donut-card">
-        <div className="donut-title">{title}</div>
-        <div className="donut-val" style={{color: color}}>{pct}%</div>
-        <div className="donut-sub">{data.pos} Win / {data.neg} Loss</div>
-      </div>
-    );
-  };
+  if (loading) return <div className="hero"><h1>Sowers Money Movers</h1><div className="status">SYNCING...</div></div>;
 
   return (
     <div>
       <div className="hero">
         <h1>Sowers Money Movers</h1>
-        <h2>Quantitative Alpha Dashboard</h2>
+        <div className="status">{selectedDate} Analysis</div>
       </div>
 
-      <div className="tabs-bar">
-        <div className={`tab ${tab === 'tracker' ? 'active' : ''}`} onClick={() => setTab('tracker')}>Live Tracker</div>
-        <div className={`tab ${tab === 'history' ? 'active' : ''}`} onClick={() => setTab('history')}>Historical Analysis</div>
-        <div className={`tab ${tab === 'import' ? 'active' : ''}`} onClick={() => setTab('import')}>Update Data</div>
+      <div className="tabs">
+        <div className={`tab ${view === 'tracker' ? 'active' : ''}`} onClick={() => setView('tracker')}>TRACKER</div>
+        <div className={`tab ${view === 'history' ? 'active' : ''}`} onClick={() => setView('history')}>RECORD</div>
+        <div className={`tab ${view === 'settings' ? 'active' : ''}`} onClick={() => setView('settings')}>CONFIG</div>
       </div>
 
-      <div className="content">
-        {tab === 'import' && (
-          <div className="panel">
-            <div className="upload-zone" onClick={() => fileRef.current.click()}>
-              <input type="file" ref={fileRef} style={{display:'none'}} onChange={handleFileUpload} />
-              <p>{csvRows.length > 0 ? "Spreadsheet Verified" : "Click to Upload stock_rankings.csv"}</p>
-            </div>
-            {dates.length > 0 && (
-              <div style={{marginTop: '30px'}}>
-                <select value={selectedDate} onChange={e => setSelectedDate(e.target.value)} style={{padding:'12px', borderRadius:'6px', background:'#1a1a26', color:'#fff', border:'1px solid #333', fontSize:'16px'}}>
-                  {dates.map(d => <option key={d} value={d}>{d}</option>)}
-                </select>
-                <br/>
-                <button className="btn-gold" onClick={processDashboard}>Build Dashboard View</button>
+      <div className="container">
+        <div className="day-btns">
+            {['Mon','Tue','Wed','Thu','Fri'].map((d, i) => (
+              <button key={d} className={`btn ${dayIdx === i ? 'active' : ''}`} onClick={() => setDayIdx(i)}>{d}</button>
+            ))}
+        </div>
+
+        {view === 'history' ? (
+          <div>
+            <div className="stats-grid">
+              <div className="stat-card">
+                <div className="stat-label">Qualified Success</div>
+                <div className="donut-ring" style={{background: `conic-gradient(#3ecf72 ${historyStats.qRate}%, #222 0)`}}>
+                  <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    {historyStats.qRate}%
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
-        )}
-
-        {tab === 'history' && stats && (
-          <>
-            <div style={{textAlign: 'center'}}>
-                <div className="donut-title">Model Weekly Record</div>
-                <div className="record-pill">{stats.historical.record}</div>
+              <div className="stat-card">
+                <div className="stat-label">Non-Qualified</div>
+                <div className="donut-ring" style={{background: `conic-gradient(#555 ${historyStats.nqRate}%, #222 0)`}}>
+                  <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    {historyStats.nqRate}%
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="charts-section">
-              {renderDonut("Historical Qualified (Win? Column)", stats.historical.qualified)}
-              {renderDonut("Market Baseline (Win? Column)", stats.historical.control)}
-            </div>
-            <div className="panel" style={{textAlign:'left', padding:'32px'}}>
-              <h3>Long-term Performance Logic</h3>
-              <p style={{color:'#666', marginTop:'12px'}}>
-                <strong>Weekly Record:</strong> A "Win" is awarded to the model for each week that the Qualified Accuracy (Top 25) was higher than the Market Baseline. <br/>
-                <strong>Source Data:</strong> Positivity is now calculated strictly from the "Win?" column in your rankings CSV.
-              </p>
-            </div>
-          </>
-        )}
-
-        {tab === 'tracker' && displayStocks.length > 0 && stats && (
-          <>
-            <div className="charts-section">
-              {renderDonut(
-                `${activeDay} Qualified Accuracy`, 
-                stats.current.qualified, 
-                (stats.current.control.pos / (stats.current.control.pos + stats.current.control.neg)) * 100
-              )}
-              {renderDonut(
-                `${activeDay} Market Baseline`, 
-                stats.current.control, 
-                (stats.current.qualified.pos / (stats.current.qualified.pos + stats.current.qualified.neg)) * 100
-              )}
+            <div className="stat-card" style={{marginBottom:'20px'}}>
+               <div className="stat-label">Model Record (W-L)</div>
+               <div className="stat-value" style={{color:'#f5a623'}}>{historyStats.record}</div>
             </div>
 
-            <div className="day-picker">
-              {DAY_COLS.map(d => (
-                <button key={d.id} className={`day-btn ${activeDay === d.id ? 'active' : ''}`} onClick={() => setActiveDay(d.id)}>{d.id}</button>
-              ))}
-            </div>
-
+            <input className="search-box" placeholder="Search ticker history..." value={search} onChange={e => setSearch(e.target.value)} />
             <table>
-              <thead>
-                <tr>
-                  <th>Ticker</th>
-                  <th className="right">Model Entry</th>
-                  <th className="right">{activeDay} Close</th>
-                  <th className="right">Growth %</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Ticker</th><th style={{textAlign:'right'}}>Growth</th></tr></thead>
               <tbody>
-                {displayStocks.map(s => {
-                  const day = s.data[activeDay];
-                  return (
-                    <tr key={s.ticker}>
-                      <td style={{fontWeight:800, color:'#fff'}}>★ {s.ticker}</td>
-                      <td className="right" style={{color:'#666'}}>${s.entry.toFixed(2)}</td>
-                      <td className="right" style={{color:'#fff'}}>${day.price.toFixed(2)}</td>
-                      <td className={`right ${day.growth >= 0 ? 'pos' : 'neg'}`}>
-                        {day.growth >= 0 ? '+' : ''}{day.growth.toFixed(2)}%
-                      </td>
-                    </tr>
-                  );
-                })}
+                {searchResults.map((s, i) => (
+                  <tr key={i}><td className="ticker">{s.ticker}</td><td style={{textAlign:'right'}} className={s.growths[dayIdx] >= 0 ? 'pos' : 'neg'}>{s.growths[dayIdx].toFixed(2)}%</td></tr>
+                ))}
               </tbody>
             </table>
-          </>
-        )}
-
-        {displayStocks.length === 0 && tab !== 'import' && (
-          <div className="panel">
-            <h3>No Data Loaded</h3>
-            <p style={{color:'#666'}}>Please visit the Update Data tab to upload your stock rankings.</p>
           </div>
+        ) : view === 'settings' ? (
+          <div>
+            <h3>Switch Analysis Date</h3>
+            <select value={selectedDate} onChange={e => setSelectedDate(e.target.value)}>{dates.map(d => <option key={d}>{d}</option>)}</select>
+          </div>
+        ) : (
+          <table>
+            <thead><tr><th>Rank</th><th>Ticker</th><th style={{textAlign:'right'}}>Growth</th></tr></thead>
+            <tbody>
+              {rankedPicks.map((s, i) => (
+                <tr key={i}>
+                  <td style={{color:'#f5a623', fontWeight:'bold'}}>#{s.rank}</td>
+                  <td className="ticker">{s.ticker}</td>
+                  <td style={{textAlign:'right'}} className={s.growths[dayIdx] >= 0 ? 'pos' : 'neg'}>{s.growths[dayIdx].toFixed(2)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>
   );
 }
-
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
 </body>
