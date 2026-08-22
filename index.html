@@ -1,39 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="robots" content="noindex, nofollow"> 
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sowers Money Movers</title>
-  
-  <script src="config.js"></script>
+  <!-- Google Font: JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
   
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
   <style>
-    body { background: #0f0f12; color: #e8e8e8; font-family: -apple-system, sans-serif; margin: 0; padding-bottom: 50px; }
-    .hero { padding: 30px; background: #12121a; border-bottom: 1px solid #2a2a3a; text-align: center; }
+    body { background: #0f0f12; color: #e8e8e8; font-family: 'JetBrains Mono', monospace; margin: 0; padding-bottom: 20px; }
+    .hero { padding: 30px; background: #12121a; border-bottom: 1px solid #2a2a3a; text-align: center; position: relative; }
+    .logo { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); height: 48px; width: 48px; object-fit: contain; border-radius: 6px; }
     .status { font-size: 11px; font-weight: bold; margin-top: 10px; text-transform: uppercase; color: #f5a623; letter-spacing: 1px; }
     .tabs { display: flex; justify-content: center; background: #12121a; border-bottom: 1px solid #2a2a3a; position: sticky; top: 0; z-index: 10; }
     .tab { padding: 15px 25px; cursor: pointer; color: #666; font-weight: bold; transition: 0.3s; }
     .tab.active { color: #f5a623; border-bottom: 3px solid #f5a623; }
-    .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+    .container { padding: 20px; max-width: 800px; margin: 0 auto; min-height: calc(100vh - 250px); }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
     .stat-card { background: #161620; padding: 20px; border-radius: 15px; border: 1px solid #2a2a3a; text-align: center; }
-    .stat-label { font-size: 10px; color: #555; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
-    .stat-value { font-size: 24px; font-weight: 900; margin-top: 5px; }
+    .stat-label { font-size: 10px; color: #777; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
+    .stat-value { font-size: 20px; font-weight: 800; margin-top: 10px; color: #f5a623; }
     .donut-ring { width: 70px; height: 70px; margin: 10px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
-    .search-box { width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; border-radius: 8px; color: #fff; margin-bottom: 15px; box-sizing: border-box; font-size: 14px; }
+    .search-box { width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; border-radius: 8px; color: #fff; margin-bottom: 15px; box-sizing: border-box; font-size: 14px; font-family: 'JetBrains Mono', monospace; }
     .day-btns { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-    .btn { padding: 8px 18px; border-radius: 20px; background: #1a1a2e; color: #888; border: 1px solid #333; cursor: pointer; font-weight: bold; font-size: 12px; }
+    .btn { padding: 8px 18px; border-radius: 20px; background: #1a1a2e; color: #888; border: 1px solid #333; cursor: pointer; font-weight: bold; font-size: 12px; font-family: 'JetBrains Mono', monospace; }
     .btn.active { background: #f5a623; color: #000; border-color: #f5a623; }
     table { width: 100%; border-collapse: collapse; background: #161620; border-radius: 12px; overflow: hidden; border: 1px solid #2a2a3a; }
-    th { text-align: left; padding: 12px; background: #1e1e2e; color: #555; font-size: 10px; text-transform: uppercase; }
+    th { text-align: left; padding: 12px; background: #1e1e2e; color: #666; font-size: 11px; text-transform: uppercase; }
     td { padding: 15px 12px; border-bottom: 1px solid #2a2a3a; font-size: 14px; }
-    .ticker { font-weight: 900; color: #fff; }
-    .pos { color: #3ecf72; } .neg { color: #e85555; }
-    select { width: 100%; padding: 15px; background: #1a1a2e; color: #fff; border: 1px solid #f5a623; border-radius: 8px; font-size: 16px; margin-bottom: 15px; font-weight: bold; }
+    .ticker { font-weight: 800; color: #fff; }
+    .score-cell { font-weight: bold; color: #f5a623; }
+    .price-cell { font-weight: bold; color: #e8e8e8; }
+    .pos { color: #3ecf72; } .neg { color: #e85555; } .neutral { color: #888; }
+    select { width: 100%; padding: 15px; background: #1a1a2e; color: #fff; border: 1px solid #f5a623; border-radius: 8px; font-size: 16px; margin-bottom: 15px; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
+    footer { text-align: center; color: #555; font-size: 11px; padding: 20px; border-top: 1px solid #1e1e2e; margin-top: 40px; }
+    @media (max-width: 600px) {
+      .logo { position: static; transform: none; margin: 0 auto 10px auto; display: block; }
+      .hero { text-align: center; }
+    }
   </style>
 </head>
 <body>
@@ -41,153 +49,212 @@
 <script type="text/babel">
 const { useState, useEffect, useMemo } = React;
 
+const SCRIPT_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSiQr7KUQ0hfV0QKHqYeZNpgGgZW1fPxvz_VbWV4BLqMUcVqeNI29O_OnsEzUWS9DKsMRpSIwd20Uj06PD33bGryggeDNPOkyVaUgRN7v5f2Ibsj8oaEM0vhGImF7E-6DOy21rAudjmt5igpcjaP0NU-Gis4DcDcHzKwoXsJJjGgdM43wBx6uUMrk2SOndmOKfYXg2zHgDgnDLdCFC1EuO2MV_yiXswjsNGjLaKoX9T3q-tpMI57Pw2FMHXq-U26nHQluBO0pekVdiq71G4qtcsMfiyWA&lib=Mc8J5LkGbnziwF7xKoyE4nfdCw1vWoYPm";
+
 function App() {
   const [data, setData] = useState([]);
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
-  const [dayIdx, setDayIdx] = useState(0);
+  const [dayIdx, setDayIdx] = useState(0); // 0 = Entry (Column O), 1 = Mon, 2 = Tue, 3 = Wed, 4 = Thu, 5 = Fri
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState('tracker');
 
   useEffect(() => {
-    // SCRIPT_URL is now pulled from config.js
-    fetch(SCRIPT_URL).then(res => res.text()).then(text => {
+    fetch(SCRIPT_URL + "&t=" + new Date().getTime()).then(res => res.text()).then(text => {
       const rows = text.trim().split(/\r?\n/).map(line => 
         line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim())
       );
       const parsed = rows.slice(1).map(r => ({
-        date: r[0], ticker: r[1], rank: parseInt(r[13]) || 0,
-        growths: [parseFloat(r[17])||0, parseFloat(r[21])||0, parseFloat(r[25])||0, parseFloat(r[29])||0, parseFloat(r[33])||0]
+        date: r[0], 
+        ticker: r[1], 
+        rank: parseInt(r[13]) || 0,
+        score: parseFloat(r[10]),
+        // Index 0: Column O (Entry Price), Indices 1-5: Mon-Fri Prices
+        prices: [parseFloat(r[14])||0, parseFloat(r[16])||0, parseFloat(r[20])||0, parseFloat(r[24])||0, parseFloat(r[28])||0, parseFloat(r[32])||0],
+        // Indices 0-5 corresponding growth values
+        growths: [parseFloat(r[15])||0, parseFloat(r[17])||0, parseFloat(r[21])||0, parseFloat(r[25])||0, parseFloat(r[29])||0, parseFloat(r[33])||0]
       }));
       const uniqueDates = [...new Set(parsed.map(r => r.date))].filter(Boolean).reverse();
       setData(parsed);
       setDates(uniqueDates);
       if (uniqueDates.length > 0) setSelectedDate(uniqueDates[0]);
       setLoading(false);
-    }).catch(err => console.error("Config missing or Bridge failed:", err));
+    });
   }, []);
 
   const historyStats = useMemo(() => {
-    let qWin = 0, qTotal = 0, nqWin = 0, nqTotal = 0, wins = 0, losses = 0;
+    let rankedWins = 0, rankedLosses = 0;
+    let unrankedWins = 0, unrankedLosses = 0;
 
     dates.forEach(d => {
       const dayData = data.filter(r => r.date === d);
-      const ranked = dayData.filter(r => r.rank > 0);
-      const unranked = dayData.filter(r => r.rank === 0);
+      
+      dayData.forEach(r => {
+        const entryPrice = r.prices[0]; // Column O entry price
+        const friPrice = r.prices[5];   // Friday price
 
-      ranked.forEach(r => {
-        if (r.growths[dayIdx] !== 0) {
-          qTotal++;
-          if (r.growths[dayIdx] > 0) qWin++;
+        if (entryPrice > 0 && friPrice > 0) {
+          if (friPrice > entryPrice) {
+            if (r.rank > 0) rankedWins++;
+            else unrankedWins++;
+          } else if (friPrice < entryPrice) {
+            if (r.rank > 0) rankedLosses++;
+            else unrankedLosses++;
+          }
         }
       });
-
-      unranked.forEach(r => {
-        if (r.growths[dayIdx] !== 0) {
-          nqTotal++;
-          if (r.growths[dayIdx] > 0) nqWin++;
-        }
-      });
-
-      const validRanked = ranked.filter(r => r.growths[dayIdx] !== 0);
-      if (validRanked.length > 0) {
-        const avg = validRanked.reduce((s, r) => s + r.growths[dayIdx], 0) / validRanked.length;
-        if (avg > 0) wins++;
-        else if (avg < 0) losses++;
-      }
     });
 
+    const rankedTotal = rankedWins + rankedLosses;
+    const rankedRate = rankedTotal > 0 ? Math.round((rankedWins / rankedTotal) * 100) : 0;
+
+    const unrankedTotal = unrankedWins + unrankedLosses;
+    const unrankedRate = unrankedTotal > 0 ? Math.round((unrankedWins / unrankedTotal) * 100) : 0;
+
     return {
-      qRate: qTotal ? Math.round((qWin/qTotal)*100) : 0,
-      nqRate: nqTotal ? Math.round((nqWin/nqTotal)*100) : 0,
-      record: `${wins}-${losses}`
+      rankedRate,
+      rankedRecord: `${rankedWins}-${rankedLosses}`,
+      unrankedRate,
+      unrankedRecord: `${unrankedWins}-${unrankedLosses}`
     };
-  }, [data, dates, dayIdx]);
+  }, [data, dates]);
 
   const allForDate = useMemo(() => data.filter(r => r.date === selectedDate), [data, selectedDate]);
   const rankedPicks = useMemo(() => allForDate.filter(r => r.rank > 0).sort((a,b) => a.rank - b.rank), [allForDate]);
-  const searchResults = useMemo(() => 
-    allForDate.filter(r => r.ticker.toLowerCase().includes(search.toLowerCase())), 
-  [allForDate, search]);
+  
+  const searchResults = useMemo(() => {
+    return allForDate
+      .filter(r => r.ticker.toLowerCase().includes(search.toLowerCase()))
+      .map(s => {
+        const entryP = s.prices[0];
+        const friP = s.prices[5];
+        let netReturn = 0;
+        let hasData = false;
+        
+        if (entryP > 0 && friP > 0) {
+          netReturn = ((friP - entryP) / entryP) * 100;
+          hasData = true;
+        }
+        return { ...s, netReturn, hasData };
+      });
+  }, [allForDate, search]);
 
   if (loading) return <div className="hero"><h1>Sowers Money Movers</h1><div className="status">SYNCING...</div></div>;
 
   return (
     <div>
       <div className="hero">
-        <h1>Sowers Money Movers</h1>
-        <div className="status">{selectedDate} Analysis</div>
+        <img src="logo.png" alt="Money Movers Logo" className="logo" />
+        <h1 style={{margin: 0, fontSize: '24px'}}>Sowers Money Movers</h1>
+        <div className="status">{selectedDate} ANALYSIS</div>
       </div>
 
       <div className="tabs">
         <div className={`tab ${view === 'tracker' ? 'active' : ''}`} onClick={() => setView('tracker')}>TRACKER</div>
         <div className={`tab ${view === 'history' ? 'active' : ''}`} onClick={() => setView('history')}>RECORD</div>
+        <div className={`tab ${view === 'search' ? 'active' : ''}`} onClick={() => setView('search')}>SEARCH</div>
         <div className={`tab ${view === 'settings' ? 'active' : ''}`} onClick={() => setView('settings')}>CONFIG</div>
       </div>
 
       <div className="container">
-        <div className="day-btns">
-            {['Mon','Tue','Wed','Thu','Fri'].map((d, i) => (
-              <button key={d} className={`btn ${dayIdx === i ? 'active' : ''}`} onClick={() => setDayIdx(i)}>{d}</button>
-            ))}
-        </div>
+        
+        {view === 'tracker' && (
+          <div className="day-btns">
+              {['Entry', 'Mon','Tue','Wed','Thu','Fri'].map((d, i) => (
+                <button key={d} className={`btn ${dayIdx === i ? 'active' : ''}`} onClick={() => setDayIdx(i)}>{d}</button>
+              ))}
+          </div>
+        )}
 
         {view === 'history' ? (
           <div>
             <div className="stats-grid">
               <div className="stat-card">
-                <div className="stat-label">Qualified Success</div>
-                <div className="donut-ring" style={{background: `conic-gradient(#3ecf72 ${historyStats.qRate}%, #222 0)`}}>
+                <div className="stat-label">Ranked Stocks</div>
+                <div className="donut-ring" style={{background: `conic-gradient(#3ecf72 ${historyStats.rankedRate}%, #222 0)`}}>
                   <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    {historyStats.qRate}%
+                    {historyStats.rankedRate}%
                   </div>
                 </div>
+                <div className="stat-value">{historyStats.rankedRecord}</div>
               </div>
-              <div className="stat-card">
-                <div className="stat-label">Non-Qualified</div>
-                <div className="donut-ring" style={{background: `conic-gradient(#555 ${historyStats.nqRate}%, #222 0)`}}>
-                  <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    {historyStats.nqRate}%
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="stat-card" style={{marginBottom:'20px'}}>
-               <div className="stat-label">Model Record (W-L)</div>
-               <div className="stat-value" style={{color:'#f5a623'}}>{historyStats.record}</div>
-            </div>
 
+              <div className="stat-card">
+                <div className="stat-label">Unranked Stocks</div>
+                <div className="donut-ring" style={{background: `conic-gradient(#555 ${historyStats.unrankedRate}%, #222 0)`}}>
+                  <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    {historyStats.unrankedRate}%
+                  </div>
+                </div>
+                <div className="stat-value" style={{color: '#888'}}>{historyStats.unrankedRecord}</div>
+              </div>
+            </div>
+          </div>
+        ) : view === 'search' ? (
+          <div>
             <input className="search-box" placeholder="Search ticker history..." value={search} onChange={e => setSearch(e.target.value)} />
             <table>
-              <thead><tr><th>Ticker</th><th style={{textAlign:'right'}}>Growth</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th>Category</th>
+                  <th style={{textAlign:'right'}}>Weekly Net</th>
+                </tr>
+              </thead>
               <tbody>
                 {searchResults.map((s, i) => (
-                  <tr key={i}><td className="ticker">{s.ticker}</td><td style={{textAlign:'right'}} className={s.growths[dayIdx] >= 0 ? 'pos' : 'neg'}>{s.growths[dayIdx].toFixed(2)}%</td></tr>
+                  <tr key={i}>
+                    <td className="ticker">{s.ticker}</td>
+                    <td style={{fontSize: '12px', color: '#888'}}>{s.rank > 0 ? `Ranked #${s.rank}` : 'Unranked'}</td>
+                    <td style={{textAlign:'right'}} className={!s.hasData ? 'neutral' : s.netReturn >= 0 ? 'pos' : 'neg'}>
+                      {s.hasData ? `${s.netReturn.toFixed(2)}%` : '--'}
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>
           </div>
         ) : view === 'settings' ? (
           <div>
-            <h3>Switch Analysis Date</h3>
+            <h3 style={{marginTop: 0}}>Switch Analysis Date</h3>
             <select value={selectedDate} onChange={e => setSelectedDate(e.target.value)}>{dates.map(d => <option key={d}>{d}</option>)}</select>
           </div>
         ) : (
           <table>
-            <thead><tr><th>Rank</th><th>Ticker</th><th style={{textAlign:'right'}}>Growth</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Ticker</th>
+                <th>Score</th>
+                <th>Price</th>
+                {/* Hide Growth Column only on Entry tab (dayIdx === 0) */}
+                {dayIdx !== 0 && <th style={{textAlign:'right'}}>Growth</th>}
+              </tr>
+            </thead>
             <tbody>
               {rankedPicks.map((s, i) => (
                 <tr key={i}>
                   <td style={{color:'#f5a623', fontWeight:'bold'}}>#{s.rank}</td>
                   <td className="ticker">{s.ticker}</td>
-                  <td style={{textAlign:'right'}} className={s.growths[dayIdx] >= 0 ? 'pos' : 'neg'}>{s.growths[dayIdx].toFixed(2)}%</td>
+                  <td className="score-cell">{!isNaN(s.score) ? s.score.toFixed(2) : '--'}</td>
+                  <td className="price-cell">{s.prices[dayIdx] ? `$${s.prices[dayIdx].toFixed(2)}` : '--'}</td>
+                  {/* Hide Growth Cell only on Entry tab */}
+                  {dayIdx !== 0 && (
+                    <td style={{textAlign:'right'}} className={s.growths[dayIdx] >= 0 ? 'pos' : 'neg'}>
+                      {s.growths[dayIdx].toFixed(2)}%
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
+
+      <footer>
+        Note: This is not financial advice
+      </footer>
     </div>
   );
 }
