@@ -35,6 +35,19 @@
     td { padding: 15px 12px; border-bottom: 1px solid #2a2a3a; font-size: 14px; }
     .ticker { font-weight: 800; color: #fff; cursor: pointer; text-decoration: underline; text-decoration-color: #444; text-underline-offset: 4px; transition: 0.2s; }
     .ticker:hover { color: #f5a623; text-decoration-color: #f5a623; }
+    
+    /* Gold Ticker Highlight */
+    .gold-ticker { 
+      background: linear-gradient(135deg, #ffd700, #f5a623); 
+      color: #000 !important; 
+      font-weight: 800; 
+      padding: 3px 8px; 
+      border-radius: 4px; 
+      display: inline-block; 
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); 
+      text-decoration: none !important;
+    }
+
     .score-cell { font-weight: bold; color: #f5a623; }
     .price-cell { font-weight: bold; color: #e8e8e8; }
     .section-header { color: #f5a623; font-size: 14px; font-weight: 800; margin: 25px 0 10px 0; text-transform: uppercase; }
@@ -47,10 +60,10 @@
     .modal-content { background: #161620; border: 2px solid #f5a623; border-radius: 12px; padding: 25px; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #2a2a3a; padding-bottom: 10px; }
     .modal-header h2 { margin: 0; color: #fff; font-size: 22px; }
-    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .modal-item { background: #1a1a2e; padding: 12px; border-radius: 8px; border: 1px solid #2a2a3a; text-align: center; }
-    .modal-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
-    .modal-val { font-size: 15px; font-weight: bold; color: #f5a623; }
+    .modal-grid { display: flex; flex-direction: column; gap: 12px; }
+    .modal-item { background: #1a1a2e; padding: 14px; border-radius: 8px; border: 1px solid #2a2a3a; text-align: center; }
+    .modal-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 800; margin-bottom: 6px; }
+    .modal-val { font-size: 18px; font-weight: bold; color: #f5a623; }
 
     @media (max-width: 850px) {
       .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -77,7 +90,7 @@ function App() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState('tracker');
-  const [selectedStock, setSelectedStock] = useState(null); // Added state for Modal
+  const [selectedStock, setSelectedStock] = useState(null);
 
   useEffect(() => {
     fetch(SCRIPT_URL)
@@ -93,7 +106,7 @@ function App() {
         );
 
         const parsed = rows.slice(1).map(r => {
-          // Column BF is index 57 (0-indexed: A=0 ... AO=40 ... BF=57)
+          // Column BF is index 57
           const rawWin = r[57] ? r[57].replace(/[^0-9.]/g, '') : '';
           let winStatus = null;
           if (rawWin === '1' || rawWin === '1.0' || rawWin === '100') {
@@ -102,11 +115,26 @@ function App() {
             winStatus = 0;
           }
 
+          // Grade extraction: BK = 62, BJ = 61, BL = 63
+          const gptGrade = r[62] ? r[62].trim() : '--';
+          const claudeGrade = r[61] ? r[61].trim() : '--';
+          const sowgorithmGrade = r[63] ? r[63].trim() : '--';
+
+          // Check if grade is A or A-
+          const isGoldGrade = (val) => {
+            if (!val) return false;
+            const norm = val.trim().toUpperCase();
+            return norm === 'A' || norm === 'A-';
+          };
+
+          const isTripleA = isGoldGrade(gptGrade) && isGoldGrade(claudeGrade) && isGoldGrade(sowgorithmGrade);
+
           return {
             date: r[0] ? r[0].trim() : '', 
             ticker: r[1] || '', 
             score: parseFloat(r[47]) || 0, // Column AV (Index 47)
             winVal: winStatus, 
+            isTripleA: isTripleA,
             prices: [
               parseFloat(r[14]) || 0, parseFloat(r[16]) || 0, parseFloat(r[20]) || 0, 
               parseFloat(r[24]) || 0, parseFloat(r[28]) || 0, parseFloat(r[32]) || 0
@@ -115,16 +143,10 @@ function App() {
               parseFloat(r[15]) || 0, parseFloat(r[17]) || 0, parseFloat(r[21]) || 0, 
               parseFloat(r[25]) || 0, parseFloat(r[29]) || 0, parseFloat(r[33]) || 0
             ],
-            // Added Extracted Data for Modal (0-indexed from A)
             details: {
-              rsi: r[43] || '--',            // AR
-              volSpike: r[44] || '--',       // AS
-              targetUpside: r[51] || '--',   // AZ
-              relStrength: r[52] || '--',    // BA
-              fcfYield: r[53] || '--',       // BB
-              peRatio: r[55] || '--',        // BD
-              pegRatio: r[56] || '--',       // BE
-              forestVerified: r[58] || '--'  // BG
+              gptGrade: gptGrade,
+              claudeGrade: claudeGrade,
+              sowgorithmGrade: sowgorithmGrade
             }
           };
         });
@@ -304,7 +326,11 @@ function App() {
               <tbody>
                 {top25.map((s, i) => (
                   <tr key={i}>
-                    <td className="ticker" onClick={() => setSelectedStock(s)}>{s.ticker}</td>
+                    <td>
+                      <span className={s.isTripleA ? "ticker gold-ticker" : "ticker"} onClick={() => setSelectedStock(s)}>
+                        {s.ticker}
+                      </span>
+                    </td>
                     <td style={{fontSize: '12px', color: '#888'}}>#{s.rank}</td>
                     <td className="score-cell">{!isNaN(s.score) ? s.score.toFixed(2) : '--'}</td>
                     <td className="price-cell">{s.prices[0] ? `$${s.prices[0].toFixed(2)}` : '--'}</td>
@@ -332,7 +358,11 @@ function App() {
               <tbody>
                 {bottom25.map((s, i) => (
                   <tr key={i}>
-                    <td className="ticker" onClick={() => setSelectedStock(s)}>{s.ticker}</td>
+                    <td>
+                      <span className={s.isTripleA ? "ticker gold-ticker" : "ticker"} onClick={() => setSelectedStock(s)}>
+                        {s.ticker}
+                      </span>
+                    </td>
                     <td style={{fontSize: '12px', color: '#888'}}>#{s.rank}</td>
                     <td className="score-cell">{!isNaN(s.score) ? s.score.toFixed(2) : '--'}</td>
                     <td className="price-cell">{s.prices[0] ? `$${s.prices[0].toFixed(2)}` : '--'}</td>
@@ -359,7 +389,11 @@ function App() {
               <tbody>
                 {searchResults.map((s, i) => (
                   <tr key={i}>
-                    <td className="ticker" onClick={() => setSelectedStock(s)}>{s.ticker}</td>
+                    <td>
+                      <span className={s.isTripleA ? "ticker gold-ticker" : "ticker"} onClick={() => setSelectedStock(s)}>
+                        {s.ticker}
+                      </span>
+                    </td>
                     <td style={{fontSize: '12px', color: '#888'}}>Ranked #{s.rank}</td>
                     <td style={{textAlign:'right'}} className={!s.hasData ? 'neutral' : s.netReturn >= 0 ? 'pos' : 'neg'}>
                       {s.hasData ? `${s.netReturn.toFixed(2)}%` : '--'}
@@ -389,7 +423,11 @@ function App() {
               {rankedAllForDate.map((s) => (
                 <tr key={s.ticker}>
                   <td style={{color:'#f5a623', fontWeight:'bold'}}>#{s.rank}</td>
-                  <td className="ticker" onClick={() => setSelectedStock(s)}>{s.ticker}</td>
+                  <td>
+                    <span className={s.isTripleA ? "ticker gold-ticker" : "ticker"} onClick={() => setSelectedStock(s)}>
+                      {s.ticker}
+                    </span>
+                  </td>
                   <td className="score-cell">{!isNaN(s.score) ? s.score.toFixed(2) : '--'}</td>
                   <td className="price-cell">{s.prices[dayIdx] ? `$${s.prices[dayIdx].toFixed(2)}` : '--'}</td>
                   {dayIdx !== 0 && (
@@ -403,7 +441,7 @@ function App() {
           </table>
         )}
 
-        {/* Dynamic Modal Overlay */}
+        {/* Modal Overlay */}
         {selectedStock && (
           <div className="modal-overlay" onClick={() => setSelectedStock(null)}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -411,14 +449,18 @@ function App() {
                 <h2>{selectedStock.ticker} <span style={{fontSize: '14px', color: '#888'}}>Rank #{selectedStock.rank}</span></h2>
               </div>
               <div className="modal-grid">
-                <div className="modal-item"><div className="modal-label">RSI</div><div className="modal-val" style={{color: '#fff'}}>{selectedStock.details.rsi}</div></div>
-                <div className="modal-item"><div className="modal-label">Vol Spike</div><div className="modal-val" style={{color: '#fff'}}>{selectedStock.details.volSpike}</div></div>
-                <div className="modal-item"><div className="modal-label">Target Upside</div><div className="modal-val">{selectedStock.details.targetUpside}</div></div>
-                <div className="modal-item"><div className="modal-label">Rel Strength</div><div className="modal-val">{selectedStock.details.relStrength}</div></div>
-                <div className="modal-item"><div className="modal-label">FCF Yield %</div><div className="modal-val">{selectedStock.details.fcfYield}</div></div>
-                <div className="modal-item"><div className="modal-label">PE Ratio</div><div className="modal-val" style={{color: '#fff'}}>{selectedStock.details.peRatio}</div></div>
-                <div className="modal-item"><div className="modal-label">PEG Ratio</div><div className="modal-val" style={{color: '#fff'}}>{selectedStock.details.pegRatio}</div></div>
-                <div className="modal-item"><div className="modal-label">Forest Verified</div><div className="modal-val" style={{color: '#3ecf72'}}>{selectedStock.details.forestVerified}</div></div>
+                <div className="modal-item">
+                  <div className="modal-label">GPT Letter Grade</div>
+                  <div className="modal-val">{selectedStock.details.gptGrade}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">Claude Letter Grade</div>
+                  <div className="modal-val">{selectedStock.details.claudeGrade}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">Sowgorithm Grade</div>
+                  <div className="modal-val">{selectedStock.details.sowgorithmGrade}</div>
+                </div>
               </div>
               <button className="btn active" style={{width: '100%', marginTop: '20px', padding: '12px'}} onClick={() => setSelectedStock(null)}>Close Details</button>
             </div>
