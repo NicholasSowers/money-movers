@@ -57,13 +57,13 @@
     
     /* Modal Styles */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(3px); }
-    .modal-content { background: #161620; border: 2px solid #f5a623; border-radius: 12px; padding: 25px; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #2a2a3a; padding-bottom: 10px; }
-    .modal-header h2 { margin: 0; color: #fff; font-size: 22px; }
-    .modal-grid { display: flex; flex-direction: column; gap: 12px; }
-    .modal-item { background: #1a1a2e; padding: 14px; border-radius: 8px; border: 1px solid #2a2a3a; text-align: center; }
-    .modal-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 800; margin-bottom: 6px; }
-    .modal-val { font-size: 18px; font-weight: bold; color: #f5a623; }
+    .modal-content { background: #161620; border: 2px solid #f5a623; border-radius: 12px; padding: 20px; width: 90%; max-width: 440px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #2a2a3a; padding-bottom: 10px; }
+    .modal-header h2 { margin: 0; color: #fff; font-size: 20px; }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .modal-item { background: #1a1a2e; padding: 10px; border-radius: 8px; border: 1px solid #2a2a3a; text-align: center; }
+    .modal-label { font-size: 9px; color: #888; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
+    .modal-val { font-size: 14px; font-weight: bold; color: #f5a623; }
 
     @media (max-width: 850px) {
       .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -115,10 +115,11 @@ function App() {
             winStatus = 0;
           }
 
-          // Grade extraction: BK = 62, BJ = 61, BL = 63
+          // Grade extraction: BK = 62, BJ = 61, BL = 63, BM = 64
           const gptGrade = r[62] ? r[62].trim() : '--';
           const claudeGrade = r[61] ? r[61].trim() : '--';
           const sowgorithmGrade = r[63] ? r[63].trim() : '--';
+          const weekPrior = r[64] ? r[64].trim() : '--';
 
           // Check if grade is A or A-
           const isGoldGrade = (val) => {
@@ -146,7 +147,16 @@ function App() {
             details: {
               gptGrade: gptGrade,
               claudeGrade: claudeGrade,
-              sowgorithmGrade: sowgorithmGrade
+              sowgorithmGrade: sowgorithmGrade,
+              weekPrior: weekPrior,
+              rsi: r[43] || '--',            // AR
+              volSpike: r[44] || '--',       // AS
+              targetUpside: r[51] || '--',   // AZ
+              relStrength: r[52] || '--',    // BA
+              fcfYield: r[53] || '--',       // BB
+              peRatio: r[55] || '--',        // BD
+              pegRatio: r[56] || '--',       // BE
+              forestVerified: r[58] || '--'  // BG
             }
           };
         });
@@ -441,7 +451,7 @@ function App() {
           </table>
         )}
 
-        {/* Modal Overlay */}
+        {/* Modal Overlay with Full Metric Breakdown */}
         {selectedStock && (
           <div className="modal-overlay" onClick={() => setSelectedStock(null)}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -460,6 +470,42 @@ function App() {
                 <div className="modal-item">
                   <div className="modal-label">Sowgorithm Grade</div>
                   <div className="modal-val">{selectedStock.details.sowgorithmGrade}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">Week Prior</div>
+                  <div className="modal-val">{selectedStock.details.weekPrior}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">RSI</div>
+                  <div className="modal-val" style={{color: '#fff'}}>{selectedStock.details.rsi}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">Vol Spike</div>
+                  <div className="modal-val" style={{color: '#fff'}}>{selectedStock.details.volSpike}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">Target Upside</div>
+                  <div className="modal-val">{selectedStock.details.targetUpside}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">Rel Strength</div>
+                  <div className="modal-val">{selectedStock.details.relStrength}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">FCF Yield %</div>
+                  <div className="modal-val">{selectedStock.details.fcfYield}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">PE Ratio</div>
+                  <div className="modal-val" style={{color: '#fff'}}>{selectedStock.details.peRatio}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">PEG Ratio</div>
+                  <div className="modal-val" style={{color: '#fff'}}>{selectedStock.details.pegRatio}</div>
+                </div>
+                <div className="modal-item">
+                  <div className="modal-label">Forest Verified</div>
+                  <div className="modal-val" style={{color: '#3ecf72'}}>{selectedStock.details.forestVerified}</div>
                 </div>
               </div>
               <button className="btn active" style={{width: '100%', marginTop: '20px', padding: '12px'}} onClick={() => setSelectedStock(null)}>Close Details</button>
