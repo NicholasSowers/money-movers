@@ -7,63 +7,96 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
-  
+
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
   <style>
-    body { background: #0f0f12; color: #e8e8e8; font-family: 'JetBrains Mono', monospace; margin: 0; padding-bottom: 20px; }
-    .hero { padding: 30px; background: #12121a; border-bottom: 1px solid #2a2a3a; text-align: center; position: relative; }
-    .logo { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); height: 48px; width: 48px; object-fit: contain; border-radius: 6px; }
-    .status { font-size: 11px; font-weight: bold; margin-top: 10px; text-transform: uppercase; color: #f5a623; letter-spacing: 1px; }
-    .tabs { display: flex; justify-content: center; background: #12121a; border-bottom: 1px solid #2a2a3a; position: sticky; top: 0; z-index: 10; }
-    .tab { padding: 15px 25px; cursor: pointer; color: #666; font-weight: bold; transition: 0.3s; }
-    .tab.active { color: #f5a623; border-bottom: 3px solid #f5a623; }
-    .container { padding: 20px; max-width: 1000px; margin: 0 auto; min-height: calc(100vh - 250px); }
-    .stats-header-banner { background: #1a1a2e; border: 1px solid #333; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: 800; font-size: 12px; color: #f5a623; letter-spacing: 1px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; }
-    .stat-card { background: #161620; padding: 20px 10px; border-radius: 15px; border: 1px solid #2a2a3a; text-align: center; }
-    .stat-label { font-size: 10px; color: #777; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
-    .stat-value { font-size: 18px; font-weight: 800; margin-top: 10px; color: #f5a623; }
-    .donut-ring { width: 70px; height: 70px; margin: 10px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
-    .search-box { width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; border-radius: 8px; color: #fff; margin-bottom: 15px; box-sizing: border-box; font-size: 14px; font-family: 'JetBrains Mono', monospace; }
-    .day-btns { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-    .btn { padding: 8px 18px; border-radius: 20px; background: #1a1a2e; color: #888; border: 1px solid #333; cursor: pointer; font-weight: bold; font-size: 12px; font-family: 'JetBrains Mono', monospace; }
-    .btn.active { background: #f5a623; color: #000; border-color: #f5a623; }
-    table { width: 100%; border-collapse: collapse; background: #161620; border-radius: 12px; overflow: hidden; border: 1px solid #2a2a3a; margin-bottom: 25px; }
-    th { text-align: left; padding: 12px; background: #1e1e2e; color: #666; font-size: 11px; text-transform: uppercase; }
-    td { padding: 15px 12px; border-bottom: 1px solid #2a2a3a; font-size: 14px; }
-    .ticker { font-weight: 800; color: #fff; cursor: pointer; text-decoration: underline; text-decoration-color: #444; text-underline-offset: 4px; transition: 0.2s; }
-    .ticker:hover { color: #f5a623; text-decoration-color: #f5a623; }
-    
-    /* Gold Ticker Highlight */
-    .gold-ticker { 
-      background: linear-gradient(135deg, #ffd700, #f5a623); 
-      color: #000 !important; 
-      font-weight: 800; 
-      padding: 3px 8px; 
-      border-radius: 4px; 
-      display: inline-block; 
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); 
-      text-decoration: none !important;
+    :root {
+      --bg: #0f0f12; --panel: #161620; --panel-alt: #1a1a2e; --line: #2a2a3a;
+      --gold: #f5a623; --gold-soft: rgba(245,166,35,0.12);
+      --up: #3ecf72; --down: #e85555; --muted: #777;
+    }
+    * { box-sizing: border-box; }
+    body { background: var(--bg); color: #e8e8e8; font-family: 'JetBrains Mono', monospace; margin: 0; padding-bottom: 20px; }
+
+    .hero { padding: 28px 20px; background: #12121a; border-bottom: 1px solid var(--line); text-align: center; position: relative; }
+    .logo { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); height: 44px; width: 44px; object-fit: contain; border-radius: 8px; }
+    .hero h1 { margin: 0; font-size: 22px; letter-spacing: 0.5px; }
+    .status { font-size: 11px; font-weight: 700; margin-top: 8px; color: var(--gold); letter-spacing: 1px; }
+
+    .tabs { display: flex; justify-content: center; background: #12121a; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; }
+    .tab { padding: 14px 22px; cursor: pointer; color: #666; font-weight: 700; font-size: 13px; transition: color 0.2s, border-color 0.2s; border-bottom: 3px solid transparent; }
+    .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab:hover:not(.active) { color: #aaa; }
+
+    .container { padding: 18px; max-width: 1000px; margin: 0 auto; min-height: calc(100vh - 250px); }
+    .view-fade { animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .stats-header-banner { background: #1a1a2e; border: 1px solid #333; padding: 11px; border-radius: 8px; text-align: center; margin-bottom: 14px; font-weight: 800; font-size: 11px; color: var(--gold); letter-spacing: 1px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px; }
+    .stat-card { background: var(--panel); padding: 18px 10px; border-radius: 14px; border: 1px solid var(--line); text-align: center; }
+    .stat-label { font-size: 10px; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+    .stat-value { font-size: 17px; font-weight: 800; margin-top: 8px; color: var(--gold); }
+    .donut-ring { width: 64px; height: 64px; margin: 8px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+
+    .search-box { width: 100%; padding: 12px; background: var(--panel-alt); border: 1px solid #333; border-radius: 8px; color: #fff; margin-bottom: 14px; box-sizing: border-box; font-size: 14px; font-family: 'JetBrains Mono', monospace; }
+    .search-box:focus { outline: none; border-color: var(--gold); }
+
+    .day-btns { display: flex; gap: 8px; margin-bottom: 18px; overflow-x: auto; padding-bottom: 4px; }
+    .btn { padding: 8px 16px; border-radius: 20px; background: var(--panel-alt); color: #888; border: 1px solid #333; cursor: pointer; font-weight: 700; font-size: 12px; font-family: 'JetBrains Mono', monospace; transition: 0.15s; flex-shrink: 0; }
+    .btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
+    .btn:hover:not(.active) { border-color: #555; color: #bbb; }
+
+    table { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: 12px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 22px; }
+    th { text-align: left; padding: 11px 12px; background: #1e1e2e; color: #666; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 13px 12px; border-bottom: 1px solid var(--line); font-size: 14px; }
+    tr:last-child td { border-bottom: none; }
+    .ticker { font-weight: 800; color: #fff; cursor: pointer; text-decoration: underline; text-decoration-color: #444; text-underline-offset: 4px; transition: 0.15s; }
+    .ticker:hover { color: var(--gold); text-decoration-color: var(--gold); }
+
+    .gold-ticker {
+      background: linear-gradient(135deg, #ffd700, var(--gold));
+      color: #000 !important; font-weight: 800; padding: 3px 8px; border-radius: 4px;
+      display: inline-block; box-shadow: 0 0 10px rgba(255, 215, 0, 0.35); text-decoration: none !important;
     }
 
-    .score-cell { font-weight: bold; color: #f5a623; }
-    .price-cell { font-weight: bold; color: #e8e8e8; }
-    .section-header { color: #f5a623; font-size: 14px; font-weight: 800; margin: 25px 0 10px 0; text-transform: uppercase; }
-    .pos { color: #3ecf72; } .neg { color: #e85555; } .neutral { color: #888; }
-    select { width: 100%; padding: 15px; background: #1a1a2e; color: #fff; border: 1px solid #f5a623; border-radius: 8px; font-size: 16px; margin-bottom: 15px; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
-    footer { text-align: center; color: #555; font-size: 11px; padding: 20px; border-top: 1px solid #1e1e2e; margin-top: 40px; }
-    
-    /* Modal Styles */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(3px); }
-    .modal-content { background: #161620; border: 2px solid #f5a623; border-radius: 12px; padding: 20px; width: 90%; max-width: 440px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #2a2a3a; padding-bottom: 10px; }
-    .modal-header h2 { margin: 0; color: #fff; font-size: 20px; }
+    .score-cell { font-weight: 700; color: var(--gold); }
+    .price-cell { font-weight: 700; color: #e8e8e8; }
+    .pending { color: #666; font-style: italic; font-weight: 600; font-size: 12px; }
+    .section-header { color: var(--gold); font-size: 13px; font-weight: 800; margin: 22px 0 10px 0; }
+    .pos { color: var(--up); } .neg { color: var(--down); } .neutral { color: #888; }
+    select { width: 100%; padding: 14px; background: var(--panel-alt); color: #fff; border: 1px solid var(--gold); border-radius: 8px; font-size: 15px; margin-bottom: 14px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    footer { text-align: center; color: #555; font-size: 11px; padding: 20px; border-top: 1px solid #1e1e2e; margin-top: 36px; line-height: 1.7; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(3px); animation: fadeIn 0.15s ease; }
+    .modal-content { background: var(--panel); border: 2px solid var(--gold); border-radius: 12px; padding: 20px; width: 90%; max-width: 440px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+    .modal-header h2 { margin: 0; color: #fff; font-size: 19px; }
+
+    .breakdown-box { background: var(--panel-alt); border: 1px solid #333; border-radius: 10px; padding: 13px; margin-bottom: 14px; }
+    .breakdown-label { font-size: 10px; color: var(--gold); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .breakdown-text { font-size: 13px; line-height: 1.65; color: #ccc; }
+
     .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .modal-item { background: #1a1a2e; padding: 10px; border-radius: 8px; border: 1px solid #2a2a3a; text-align: center; }
+    .modal-item { background: var(--panel-alt); padding: 10px; border-radius: 8px; border: 1px solid var(--line); text-align: center; }
     .modal-label { font-size: 9px; color: #888; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
-    .modal-val { font-size: 14px; font-weight: bold; color: #f5a623; }
+    .modal-val { font-size: 14px; font-weight: 700; color: var(--gold); }
+
+    /* Chat tab */
+    .chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 260px); min-height: 420px; }
+    .chat-disclaimer { font-size: 11px; color: var(--muted); background: var(--panel-alt); border: 1px solid #333; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
+    .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 4px 2px 12px 2px; }
+    .chat-empty { color: var(--muted); font-size: 13px; text-align: center; margin-top: 30px; }
+    .chat-bubble { max-width: 80%; padding: 10px 13px; border-radius: 12px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+    .chat-bubble.user { align-self: flex-end; background: var(--gold-soft); border: 1px solid var(--gold); color: #fff; }
+    .chat-bubble.bot { align-self: flex-start; background: var(--panel-alt); border: 1px solid #333; color: #ddd; }
+    .chat-loading { color: var(--muted); font-style: italic; }
+    .chat-input-row { display: flex; gap: 8px; align-items: center; }
+    .chat-input { margin-bottom: 0 !important; }
+    .chat-send { flex-shrink: 0; padding: 12px 20px; }
 
     @media (max-width: 850px) {
       .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -82,15 +115,71 @@ const { useState, useEffect, useMemo } = React;
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSkJGrxSTkCk88LMTiTgSRmvP_tf37HyeZWnsXl3sKNF9ESDdmUp1R9vCODEqej6qcXw/exec";
 
+// The Chat tab posts { query } here and expects back { text }.
+// This CANNOT point directly at api.anthropic.com from a page hosted on
+// GitHub Pages (or anywhere outside Claude's own artifact preview) — that
+// would require embedding a secret API key in public page source, which
+// anyone viewing "View Source" could copy and spend against your account.
+// Point this at a small backend you control instead (serverless function,
+// etc.) that holds the key server-side. See chat-worker-example.js.
+const CHAT_API_URL = "https://YOUR-BACKEND-ENDPOINT-HERE";
+
+// Sorts by Model Score (BW) descending, pushing rows with no recorded
+// score to the bottom instead of mixing them in at an implied 0.
+const byScoreDesc = (a, b) => {
+  if (a.hasScore && b.hasScore) return b.score - a.score;
+  if (a.hasScore) return -1;
+  if (b.hasScore) return 1;
+  return 0;
+};
+
+// Builds a short, plain-English read of a ticker using only the metrics
+// already recorded in the sheet (RSI, target upside, PEG, FCF yield, volume,
+// forest-model check). This is not a prediction and doesn't assign a grade —
+// it just translates the numbers that already exist into a sentence or two.
+function buildBreakdown(details) {
+  const lines = [];
+
+  const rsi = parseFloat(details.rsi);
+  if (!isNaN(rsi)) {
+    if (rsi >= 70) lines.push(`RSI is at ${rsi}, in overbought territory.`);
+    else if (rsi <= 30) lines.push(`RSI is at ${rsi}, in oversold territory.`);
+    else lines.push(`RSI is at ${rsi}, a neutral reading.`);
+  }
+
+  const upside = parseFloat(details.targetUpside);
+  if (!isNaN(upside)) {
+    lines.push(`Recorded analyst target upside is ${upside > 0 ? '+' : ''}${upside}%.`);
+  }
+
+  const peg = parseFloat(details.pegRatio);
+  if (!isNaN(peg)) {
+    if (peg < 1) lines.push(`PEG of ${peg} is on the cheap side relative to growth.`);
+    else if (peg > 2) lines.push(`PEG of ${peg} is rich relative to growth.`);
+    else lines.push(`PEG of ${peg} is roughly in line with growth.`);
+  }
+
+  const fcf = parseFloat(details.fcfYield);
+  if (!isNaN(fcf)) lines.push(`FCF yield is ${fcf}%.`);
+
+  if (details.volSpike && details.volSpike !== '--') lines.push(`Volume: ${details.volSpike}.`);
+  if (details.forestVerified && details.forestVerified !== '--') lines.push(`Forest-model check: ${details.forestVerified}.`);
+
+  return lines.length ? lines.join(' ') : "No recorded metrics yet for this ticker.";
+}
+
 function App() {
   const [data, setData] = useState([]);
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
-  const [dayIdx, setDayIdx] = useState(0); 
+  const [dayIdx, setDayIdx] = useState(0);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState('tracker');
   const [selectedStock, setSelectedStock] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
 
   useEffect(() => {
     fetch(SCRIPT_URL)
@@ -100,8 +189,8 @@ function App() {
         if (cleanText.startsWith("Error:") || cleanText.startsWith("<")) {
           throw new Error("Invalid CSV data received from Apps Script. Verify Google Sheet URL.");
         }
-        
-        const rows = cleanText.split(/\r?\n/).map(line => 
+
+        const rows = cleanText.split(/\r?\n/).map(line =>
           line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim())
         );
 
@@ -130,18 +219,27 @@ function App() {
 
           const isTripleA = isGoldGrade(gptGrade) && isGoldGrade(claudeGrade) && isGoldGrade(sowgorithmGrade);
 
+          // Column BW (Index 74) Model Score — tracked honestly: if the
+          // pipeline hasn't produced a score yet, we keep that as "no score"
+          // rather than defaulting to 0, which would display as a real
+          // (and misleadingly bad) number.
+          const rawScore = r[74] !== undefined ? String(r[74]).trim() : '';
+          const parsedScore = parseFloat(rawScore);
+          const hasScore = rawScore !== '' && !isNaN(parsedScore);
+
           return {
-            date: r[0] ? r[0].trim() : '', 
-            ticker: r[1] || '', 
-            score: parseFloat(r[47]) || 0, // Column AV (Index 47)
-            winVal: winStatus, 
+            date: r[0] ? r[0].trim() : '',
+            ticker: r[1] || '',
+            score: hasScore ? parsedScore : null,
+            hasScore,
+            winVal: winStatus,
             isTripleA: isTripleA,
             prices: [
-              parseFloat(r[14]) || 0, parseFloat(r[16]) || 0, parseFloat(r[20]) || 0, 
+              parseFloat(r[14]) || 0, parseFloat(r[16]) || 0, parseFloat(r[20]) || 0,
               parseFloat(r[24]) || 0, parseFloat(r[28]) || 0, parseFloat(r[32]) || 0
             ],
             growths: [
-              parseFloat(r[15]) || 0, parseFloat(r[17]) || 0, parseFloat(r[21]) || 0, 
+              parseFloat(r[15]) || 0, parseFloat(r[17]) || 0, parseFloat(r[21]) || 0,
               parseFloat(r[25]) || 0, parseFloat(r[29]) || 0, parseFloat(r[33]) || 0
             ],
             details: {
@@ -175,60 +273,15 @@ function App() {
 
   const rankedAllForDate = useMemo(() => {
     const dayData = data.filter(r => r.date === selectedDate);
-    return [...dayData].sort((a, b) => b.score - a.score).map((item, idx) => ({
+    return [...dayData].sort(byScoreDesc).map((item, idx) => ({
       ...item,
       rank: idx + 1
     }));
   }, [data, selectedDate]);
 
-  const historyStats = useMemo(() => {
-    let top10Wins = 0, top10Losses = 0;
-    let top25Wins = 0, top25Losses = 0;
-    let botWins = 0, botLosses = 0;
-    let remWins = 0, remLosses = 0;
-
-    dates.forEach(d => {
-      const dayData = data.filter(r => r.date === d).sort((a, b) => b.score - a.score);
-      if (dayData.length === 0) return;
-
-      const top10Tickers = new Set(dayData.slice(0, 10).map(r => r.ticker));
-      const top25Tickers = new Set(dayData.slice(0, 25).map(r => r.ticker));
-      const bot25Tickers = new Set(dayData.slice(-25).map(r => r.ticker));
-
-      dayData.forEach(r => {
-        if (r.winVal === null) return; 
-
-        if (top10Tickers.has(r.ticker)) {
-          if (r.winVal === 1) top10Wins++; else top10Losses++;
-        }
-        
-        if (top25Tickers.has(r.ticker)) {
-          if (r.winVal === 1) top25Wins++; else top25Losses++;
-        } else if (bot25Tickers.has(r.ticker)) {
-          if (r.winVal === 1) botWins++; else botLosses++;
-        } else {
-          if (r.winVal === 1) remWins++; else remLosses++;
-        }
-      });
-    });
-
-    const calcRate = (w, l) => (w + l > 0 ? Math.round((w / (w + l)) * 100) : 0);
-
-    return {
-      top10Rate: calcRate(top10Wins, top10Losses),
-      top10Record: `${top10Wins}-${top10Losses}`,
-      topRate: calcRate(top25Wins, top25Losses),
-      topRecord: `${top25Wins}-${top25Losses}`,
-      botRate: calcRate(botWins, botLosses),
-      botRecord: `${botWins}-${botLosses}`,
-      remRate: calcRate(remWins, remLosses),
-      remRecord: `${remWins}-${remLosses}`
-    };
-  }, [data, dates]);
-
   const top25 = useMemo(() => rankedAllForDate.slice(0, 25), [rankedAllForDate]);
   const bottom25 = useMemo(() => [...rankedAllForDate].reverse().slice(0, 25), [rankedAllForDate]);
-  
+
   const searchResults = useMemo(() => {
     return rankedAllForDate
       .filter(r => r.ticker.toLowerCase().includes(search.toLowerCase()))
@@ -237,7 +290,7 @@ function App() {
         const friP = s.prices[5];
         let netReturn = 0;
         let hasData = false;
-        
+
         if (entryP > 0 && friP > 0) {
           netReturn = ((friP - entryP) / entryP) * 100;
           hasData = true;
@@ -246,13 +299,43 @@ function App() {
       });
   }, [rankedAllForDate, search]);
 
+  // Sends a question to your backend and expects { text } back. This is
+  // background/news context only — the backend prompt (see
+  // chat-worker-example.js) explicitly tells the model not to return a
+  // letter grade, score, or buy/sell recommendation.
+  const sendChatMessage = async () => {
+    const query = chatInput.trim();
+    if (!query || chatLoading) return;
+    setChatMessages(prev => [...prev, { role: 'user', text: query }]);
+    setChatInput('');
+    setChatLoading(true);
+    try {
+      const res = await fetch(CHAT_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      });
+      if (!res.ok) throw new Error(`Backend returned ${res.status}`);
+      const json = await res.json();
+      setChatMessages(prev => [...prev, { role: 'bot', text: json.text || "No background found for that." }]);
+    } catch (err) {
+      setChatMessages(prev => [...prev, { role: 'bot', text: `Couldn't reach the background service (${err.message}). Set CHAT_API_URL to your deployed backend.` }]);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
   if (loading) return <div className="hero"><h1>Sowers Money Movers</h1><div className="status">SYNCING...</div></div>;
+
+  const ScoreCell = ({ s }) => s.hasScore
+    ? <td className="score-cell">{s.score.toFixed(2)}</td>
+    : <td><span className="pending">Pending</span></td>;
 
   return (
     <div>
       <div className="hero">
         <img src="logo.png" alt="Money Movers Logo" className="logo" />
-        <h1 style={{margin: 0, fontSize: '24px'}}>Sowers Money Movers</h1>
+        <h1>Sowers Money Movers</h1>
         <div className="status">{selectedDate} ANALYSIS</div>
       </div>
 
@@ -260,11 +343,12 @@ function App() {
         <div className={`tab ${view === 'tracker' ? 'active' : ''}`} onClick={() => setView('tracker')}>TRACKER</div>
         <div className={`tab ${view === 'history' ? 'active' : ''}`} onClick={() => setView('history')}>RECORD</div>
         <div className={`tab ${view === 'search' ? 'active' : ''}`} onClick={() => setView('search')}>SEARCH</div>
+        <div className={`tab ${view === 'chat' ? 'active' : ''}`} onClick={() => setView('chat')}>CHAT</div>
         <div className={`tab ${view === 'settings' ? 'active' : ''}`} onClick={() => setView('settings')}>CONFIG</div>
       </div>
 
-      <div className="container">
-        
+      <div className="container view-fade" key={view}>
+
         {view === 'tracker' && (
           <div className="day-btns">
               {['Entry', 'Mon','Tue','Wed','Thu','Fri'].map((d, i) => (
@@ -275,59 +359,13 @@ function App() {
 
         {view === 'history' ? (
           <div>
-            <div className="stats-header-banner">
-              OVERALL WIN-LOSS RECORDS (COLUMN BF WIN %)
-            </div>
-
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-label">Top 10 Ranked</div>
-                <div className="donut-ring" style={{background: `conic-gradient(#f5a623 ${historyStats.top10Rate}%, #222 0)`}}>
-                  <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', color: '#f5a623'}}>
-                    {historyStats.top10Rate}%
-                  </div>
-                </div>
-                <div className="stat-value" style={{color: '#f5a623'}}>{historyStats.top10Record}</div>
-              </div>
-
-              <div className="stat-card">
-                <div className="stat-label">Top 25 Ranked</div>
-                <div className="donut-ring" style={{background: `conic-gradient(#3ecf72 ${historyStats.topRate}%, #222 0)`}}>
-                  <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    {historyStats.topRate}%
-                  </div>
-                </div>
-                <div className="stat-value" style={{color: '#3ecf72'}}>{historyStats.topRecord}</div>
-              </div>
-
-              <div className="stat-card">
-                <div className="stat-label">Bottom 25 Ranked</div>
-                <div className="donut-ring" style={{background: `conic-gradient(#e85555 ${historyStats.botRate}%, #222 0)`}}>
-                  <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    {historyStats.botRate}%
-                  </div>
-                </div>
-                <div className="stat-value" style={{color: '#e85555'}}>{historyStats.botRecord}</div>
-              </div>
-
-              <div className="stat-card">
-                <div className="stat-label">Remaining Field</div>
-                <div className="donut-ring" style={{background: `conic-gradient(#555 ${historyStats.remRate}%, #222 0)`}}>
-                  <div style={{background:'#161620', width:'80%', height:'80%', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    {historyStats.remRate}%
-                  </div>
-                </div>
-                <div className="stat-value" style={{color: '#888'}}>{historyStats.remRecord}</div>
-              </div>
-            </div>
-
             <div className="section-header">Top 25 Performers (Column BF Win %)</div>
             <table>
               <thead>
                 <tr>
                   <th>Ticker</th>
                   <th>Rank</th>
-                  <th>Score (AV)</th>
+                  <th>Model Score (BW)</th>
                   <th>Entry</th>
                   <th>Finished</th>
                   <th style={{textAlign:'right'}}>Weekly Win</th>
@@ -342,7 +380,7 @@ function App() {
                       </span>
                     </td>
                     <td style={{fontSize: '12px', color: '#888'}}>#{s.rank}</td>
-                    <td className="score-cell">{!isNaN(s.score) ? s.score.toFixed(2) : '--'}</td>
+                    <ScoreCell s={s} />
                     <td className="price-cell">{s.prices[0] ? `$${s.prices[0].toFixed(2)}` : '--'}</td>
                     <td className="price-cell">{s.prices[5] ? `$${s.prices[5].toFixed(2)}` : '--'}</td>
                     <td style={{textAlign:'right'}} className={s.winVal === 1 ? 'pos' : s.winVal === 0 ? 'neg' : 'neutral'}>
@@ -359,7 +397,7 @@ function App() {
                 <tr>
                   <th>Ticker</th>
                   <th>Rank</th>
-                  <th>Score (AV)</th>
+                  <th>Model Score (BW)</th>
                   <th>Entry</th>
                   <th>Finished</th>
                   <th style={{textAlign:'right'}}>Weekly Win</th>
@@ -374,7 +412,7 @@ function App() {
                       </span>
                     </td>
                     <td style={{fontSize: '12px', color: '#888'}}>#{s.rank}</td>
-                    <td className="score-cell">{!isNaN(s.score) ? s.score.toFixed(2) : '--'}</td>
+                    <ScoreCell s={s} />
                     <td className="price-cell">{s.prices[0] ? `$${s.prices[0].toFixed(2)}` : '--'}</td>
                     <td className="price-cell">{s.prices[5] ? `$${s.prices[5].toFixed(2)}` : '--'}</td>
                     <td style={{textAlign:'right'}} className={s.winVal === 1 ? 'pos' : s.winVal === 0 ? 'neg' : 'neutral'}>
@@ -413,10 +451,108 @@ function App() {
               </tbody>
             </table>
           </div>
+        ) : view === 'chat' ? (
+          <div className="chat-wrap">
+            <div className="chat-disclaimer">
+              Background and recent news context only — not a grade, score, or recommendation.
+            </div>
+            <div className="chat-messages">
+              {chatMessages.length === 0 && !chatLoading && (
+                <div className="chat-empty">Ask about a ticker — e.g. "What's going on with AAPL lately?"</div>
+              )}
+              {chatMessages.map((m, i) => (
+                <div key={i} className={`chat-bubble ${m.role}`}>{m.text}</div>
+              ))}
+              {chatLoading && <div className="chat-bubble bot chat-loading">Looking this up…</div>}
+            </div>
+            <div className="chat-input-row">
+              <input
+                className="search-box chat-input"
+                placeholder="Ask about a ticker..."
+                value={chatInput}
+                onChange={e => setChatInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && sendChatMessage()}
+              />
+              <button className="btn active chat-send" onClick={sendChatMessage} disabled={chatLoading}>Send</button>
+            </div>
+          </div>
         ) : view === 'settings' ? (
           <div>
-            <h3 style={{marginTop: 0}}>Switch Analysis Date</h3>
-            <select value={selectedDate} onChange={e => setSelectedDate(e.target.value)}>{dates.map(d => <option key={d}>{d}</option>)}</select>
+            <h3 style={{marginTop: 0}}>Configuration</h3>
+            <div style={{marginBottom: '20px'}}>
+              <label style={{fontSize: '12px', color: '#888', fontWeight: 'bold', display: 'block', marginBottom: '8px'}}>
+                SWITCH ANALYSIS DATE
+              </label>
+              <select value={selectedDate} onChange={e => setSelectedDate(e.target.value)}>
+                {dates.map((d) => (
+                  <option key={d} value={d}>
+                    {d} {d === dates[0] ? '(Most Recent)' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Most Recent Stock Analysis Breakdown */}
+            {dates.length > 0 && (() => {
+              const latestDate = dates[0];
+              const latestStocks = data.filter(r => r.date === latestDate).sort(byScoreDesc);
+              const tripleACount = latestStocks.filter(s => s.isTripleA).length;
+
+              return (
+                <div>
+                  <div className="stats-header-banner" style={{marginTop: '25px'}}>
+                    MOST RECENT STOCK ANALYSIS ({latestDate})
+                  </div>
+
+                  <div className="stats-grid" style={{gridTemplateColumns: 'repeat(3, 1fr)'}}>
+                    <div className="stat-card">
+                      <div className="stat-label">Analysis Date</div>
+                      <div className="stat-value" style={{fontSize: '15px'}}>{latestDate}</div>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-label">Total Analyzed</div>
+                      <div className="stat-value">{latestStocks.length} Stocks</div>
+                    </div>
+                    <div className="stat-card">
+                      <div className="stat-label">Triple-A Rated</div>
+                      <div className="stat-value" style={{color: '#ffd700'}}>{tripleACount} Tickers</div>
+                    </div>
+                  </div>
+
+                  <div className="section-header">Most Recent Stock Analysis Breakdown</div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Rank</th>
+                        <th>Ticker</th>
+                        <th>Model Score</th>
+                        <th>Entry Price</th>
+                        <th>GPT Grade</th>
+                        <th>Claude Grade</th>
+                        <th>Sowgorithm</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {latestStocks.map((s, idx) => (
+                        <tr key={s.ticker + idx}>
+                          <td style={{color: '#f5a623', fontWeight: 'bold'}}>#{idx + 1}</td>
+                          <td>
+                            <span className={s.isTripleA ? "ticker gold-ticker" : "ticker"} onClick={() => setSelectedStock({...s, rank: idx + 1})}>
+                              {s.ticker}
+                            </span>
+                          </td>
+                          <ScoreCell s={s} />
+                          <td className="price-cell">{s.prices[0] ? `$${s.prices[0].toFixed(2)}` : '--'}</td>
+                          <td style={{fontWeight: 'bold', color: '#fff'}}>{s.details.gptGrade}</td>
+                          <td style={{fontWeight: 'bold', color: '#fff'}}>{s.details.claudeGrade}</td>
+                          <td style={{fontWeight: 'bold', color: '#fff'}}>{s.details.sowgorithmGrade}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              );
+            })()}
           </div>
         ) : (
           <table>
@@ -424,7 +560,7 @@ function App() {
               <tr>
                 <th>Rank</th>
                 <th>Ticker</th>
-                <th>Score</th>
+                <th>Model Score</th>
                 <th>Price</th>
                 {dayIdx !== 0 && <th style={{textAlign:'right'}}>Growth</th>}
               </tr>
@@ -438,7 +574,7 @@ function App() {
                       {s.ticker}
                     </span>
                   </td>
-                  <td className="score-cell">{!isNaN(s.score) ? s.score.toFixed(2) : '--'}</td>
+                  <ScoreCell s={s} />
                   <td className="price-cell">{s.prices[dayIdx] ? `$${s.prices[dayIdx].toFixed(2)}` : '--'}</td>
                   {dayIdx !== 0 && (
                     <td style={{textAlign:'right'}} className={s.growths[dayIdx] >= 0 ? 'pos' : 'neg'}>
@@ -458,6 +594,12 @@ function App() {
               <div className="modal-header">
                 <h2>{selectedStock.ticker} <span style={{fontSize: '14px', color: '#888'}}>Rank #{selectedStock.rank}</span></h2>
               </div>
+
+              <div className="breakdown-box">
+                <div className="breakdown-label">Quick Read (from recorded metrics)</div>
+                <div className="breakdown-text">{buildBreakdown(selectedStock.details)}</div>
+              </div>
+
               <div className="modal-grid">
                 <div className="modal-item">
                   <div className="modal-label">GPT Letter Grade</div>
@@ -516,7 +658,8 @@ function App() {
       </div>
 
       <footer>
-        Note: This is not financial advice
+        Note: This is not financial advice.<br/>
+        "Quick Read" text is generated from recorded metrics only — it is not a prediction or a grade.
       </footer>
     </div>
   );
